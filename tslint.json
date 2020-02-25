@@ -8,7 +8,8 @@
     "ordered-imports": [false],
     "jsx-no-multiline-js": false,
     "arrow-parens": false,
-    "object-literal-sort-keys": false
+    "object-literal-sort-keys": false,
+    "jsx-no-lambda": false
   },
   "rulesDirectory": []
 }
