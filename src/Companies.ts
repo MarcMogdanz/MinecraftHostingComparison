@@ -16,6 +16,8 @@ const zapHosting = new Company(
   DefaultPort.EXTRA_CHARGE,
   DDoSProtection.FREE,
   null,
+  "/zap_hosting.png",
+  "https://zap-hosting.com",
 );
 
 const nitrado = new Company(
@@ -31,6 +33,8 @@ const nitrado = new Company(
   DefaultPort.FREE,
   DDoSProtection.FREE,
   Database.FREE,
+  "/zap_hosting.png",
+  "https://nitrado.net",
 );
 
 const test = new Company(
@@ -46,6 +50,8 @@ const test = new Company(
   DefaultPort.FREE,
   DDoSProtection.EXTRA_CHARGE,
   null,
+  "/zap_hosting.png",
+  "https://google.com",
 );
 
 const AllCompanies = [zapHosting, nitrado, test];

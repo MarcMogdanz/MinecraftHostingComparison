@@ -13,6 +13,10 @@ export default class Company {
   // TODO: Server Locations (Filter)
   // TODO: Company Locations (Filter)
 
+  // TODO: use gatsby-image
+  public logoUrl: string; // path in static folder starting with /
+  public url: string; // redirect url
+
   constructor(
     name: string,
     billingModel: BillingModel[] | null,
@@ -22,6 +26,8 @@ export default class Company {
     defaultPort: DefaultPort | null,
     ddosProtection: DDoSProtection | null,
     database: Database | null,
+    logoUrl: string, // TODO
+    url: string,
   ) {
     this.name = name;
     this.billingModel = billingModel;
@@ -31,6 +37,8 @@ export default class Company {
     this.defaultPort = defaultPort;
     this.ddosProtection = ddosProtection;
     this.database = database;
+    this.logoUrl = logoUrl;
+    this.url = url;
   }
 }
 
