@@ -1,5 +1,5 @@
 import * as React from "react";
-import styled from "styled-components";
+import { graphql } from "gatsby";
 import Company, {
   BillingModel,
   PriceModel,
@@ -9,15 +9,15 @@ import Company, {
   Database,
 } from "../Company";
 import { AllCompanies } from "../Companies";
-import { /*TextFilter,*/ CheckboxFilter, NumberFilter } from "./FilterElement";
+import { CheckboxFilter, SwitchFilter, NumberFilter } from "./FilterElement";
+import { Modal, ModalHeadline, ModalText, ModalElement } from "./Modal";
 
-// @ts-ignore
 interface FiltersProps {
   updateCompanies: (companies: Company[]) => void;
 }
 
 interface FiltersState {
-  name: string;
+  name: string; // TODO: remove?
   billingModelPrepaid: boolean;
   billingModelContract: boolean;
   minimumDuration: number;
@@ -29,21 +29,28 @@ interface FiltersState {
   defaultPortFree: boolean;
   ddosProtectionFree: boolean;
   databaseFree: boolean;
+  selectedModal: null | FiltersModal;
+}
+
+enum FiltersModal {
+  FINANCES = "FINANCES",
+  PAYMENT = "PAYMENT",
+  EXTRAS = "EXTRAS",
 }
 
 export default class Filters extends React.Component<
   FiltersProps,
   FiltersState
 > {
-  // @ts-ignore
-  constructor(props) {
+  constructor(props: FiltersProps) {
     super(props);
 
     this.state = {
+      // filters
       name: "",
       billingModelContract: false,
       billingModelPrepaid: false,
-      minimumDuration: 0, // TODO: set to 30
+      minimumDuration: 30,
       priceModelSlots: false,
       priceModelRam: false,
       paymentMethodPaysafecard: false,
@@ -52,123 +59,193 @@ export default class Filters extends React.Component<
       defaultPortFree: false,
       ddosProtectionFree: false,
       databaseFree: false,
+      selectedModal: null,
     };
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChangeNEW = this.handleChangeNEW.bind(this);
   }
+
+  // TODO: remove?
+  /*
+    <TextFilter
+      labelText="Name"
+      name="name"
+      value={this.state.name}
+      handleChange={this.handleChange}
+    />
+    */
 
   public render() {
     return (
       <>
-        <form onSubmit={this.handleSubmit}>
-          {/*
-          <Divider>
-            <TextFilter
-              labelText="Name"
-              name="name"
-              value={this.state.name}
-              handleChange={this.handleChange}
-            />
-          </Divider>
-          */}
+        <div className="flex justify-center">
+          <div
+            className="flex-initial rounded-lg bg-gray-300 text-gray-800 text-sm md:text-md font-mono shadow-md px-4 py-2 m-2"
+            onClick={() => this.updateSelectedModal(FiltersModal.FINANCES)}
+          >
+            Finanzen
+          </div>
+          <div
+            className="flex-initial rounded-lg bg-gray-300 text-gray-800 text-sm md:text-md font-mono shadow-md px-4 py-2 m-2"
+            onClick={() => this.updateSelectedModal(FiltersModal.PAYMENT)}
+          >
+            Zahlung
+          </div>
+          <div
+            className="flex-initial rounded-lg bg-gray-300 text-gray-800 text-sm md:text-md font-mono shadow-md px-4 py-2 m-2"
+            onClick={() => this.updateSelectedModal(FiltersModal.EXTRAS)}
+          >
+            Extras
+          </div>
+        </div>
 
-          <Divider>
-            <div>Billing Model</div>
-            <CheckboxFilter
-              labelText="Contract"
-              name="billingModelContract"
-              checked={this.state.billingModelContract}
-              handleChange={this.handleChange}
-            />
-            <CheckboxFilter
-              labelText="Prepaid"
-              name="billingModelPrepaid"
-              checked={this.state.billingModelPrepaid}
-              handleChange={this.handleChange}
-            />
-          </Divider>
+        {this.state.selectedModal === FiltersModal.FINANCES && (
+          <Modal title="Finanzen">
+            <ModalHeadline>Abrechnung</ModalHeadline>
+            <ModalText>
+              Die Art und Weise wie wie abgerechnet wird. Wähle eine Sache aus,
+              wenn du möchtest, dass mindestens das angeboten wird. Wähle beides
+              aus, wenn du möchtest, dass auch beides angeboten wird. Wenn du
+              nichts auswählst, wird diese Option ignoriert.
+            </ModalText>
 
-          <Divider>
-            <NumberFilter
-              labelText="Minimum duration (0 = ignore, X in days)"
-              name="minimumDuration"
-              value={this.state.minimumDuration}
-              min={0}
-              max={90}
-              handleChange={this.handleChange}
-            />
-          </Divider>
+            <ModalElement>
+              <CheckboxFilter
+                labelText="Contract"
+                name="billingModelContract"
+                checked={this.state.billingModelContract}
+                handleChange={this.handleChange}
+              />
+            </ModalElement>
 
-          <Divider>
-            <div>Price Model</div>
-            <CheckboxFilter
-              labelText="Slots"
-              name="priceModelSlots"
-              checked={this.state.priceModelSlots}
-              handleChange={this.handleChange}
-            />
-            <CheckboxFilter
-              labelText="RAM"
-              name="priceModelRam"
-              checked={this.state.priceModelRam}
-              handleChange={this.handleChange}
-            />
-          </Divider>
+            <ModalElement>
+              <CheckboxFilter
+                labelText="Prepaid"
+                name="billingModelPrepaid"
+                checked={this.state.billingModelPrepaid}
+                handleChange={this.handleChange}
+              />
+            </ModalElement>
 
-          <Divider>
-            <div>Paymentmethods</div>
-            <CheckboxFilter
-              labelText="Paysafecard"
-              name="paymentMethodPaysafecard"
-              checked={this.state.paymentMethodPaysafecard}
-              handleChange={this.handleChange}
-            />
-            <CheckboxFilter
-              labelText="PayPal"
-              name="paymentMethodPayPal"
-              checked={this.state.paymentMethodPayPal}
-              handleChange={this.handleChange}
-            />
-            <CheckboxFilter
-              labelText="Wire Transfer"
-              name="paymentMethodWireTransfer"
-              checked={this.state.paymentMethodWireTransfer}
-              handleChange={this.handleChange}
-            />
-          </Divider>
+            <ModalHeadline>Mindestlaufzeit</ModalHeadline>
+            <ModalText>
+              Die Mindestlaufzeit bezieht sich auf die minimalste Anzahl an
+              Tagen, die du deinen Server buchen musst. Wählst du 0 aus, dann
+              wird diese Option ignoriert.
+            </ModalText>
 
-          <Divider>
-            <div>Default Port (true=Free, false=egal)</div>
-            <CheckboxFilter
-              labelText="Free"
-              name="defaultPortFree"
-              checked={this.state.defaultPortFree}
-              handleChange={this.handleChange}
-            />
-          </Divider>
+            <ModalElement>
+              <NumberFilter
+                name="minimumDuration"
+                value={this.state.minimumDuration}
+                min={0}
+                max={365}
+                handleChange={this.handleChangeNEW}
+              />
+            </ModalElement>
 
-          <Divider>
-            <div>DDoS Protection (true=Free, false=egal)</div>
-            <CheckboxFilter
-              labelText="Free"
-              name="ddosProtectionFree"
-              checked={this.state.ddosProtectionFree}
-              handleChange={this.handleChange}
-            />
-          </Divider>
+            <ModalHeadline>Preismodell</ModalHeadline>
+            <ModalText>
+              Das Preismodell bezieht sich darauf anhand welcher Kriterien der
+              Preis gebildet wird. Wenn du nichts auswählst, wird diese Option
+              ignoriert.
+            </ModalText>
 
-          <Divider>
-            <div>Database (true=Free, false=egal)</div>
-            <CheckboxFilter
-              labelText="Free"
-              name="databaseFree"
-              checked={this.state.databaseFree}
-              handleChange={this.handleChange}
-            />
-          </Divider>
-        </form>
-        {/* <Table companies={companies} /> */}
+            <ModalElement>
+              <CheckboxFilter
+                labelText="Slots"
+                name="priceModelSlots"
+                checked={this.state.priceModelSlots}
+                handleChange={this.handleChange}
+              />
+            </ModalElement>
+
+            <ModalElement>
+              <CheckboxFilter
+                labelText="RAM"
+                name="priceModelRam"
+                checked={this.state.priceModelRam}
+                handleChange={this.handleChange}
+              />
+            </ModalElement>
+          </Modal>
+        )}
+
+        {this.state.selectedModal === FiltersModal.PAYMENT && (
+          <Modal title="Zahlungsmöglichkeiten">
+            <ModalText>
+              Wähle alle Zahlungsarten, die angeboten werden sollen.
+            </ModalText>
+
+            <ModalElement>
+              <CheckboxFilter
+                labelText="Paysafecard"
+                name="paymentMethodPaysafecard"
+                checked={this.state.paymentMethodPaysafecard}
+                handleChange={this.handleChange}
+              />
+            </ModalElement>
+
+            <ModalElement>
+              <CheckboxFilter
+                labelText="PayPal"
+                name="paymentMethodPayPal"
+                checked={this.state.paymentMethodPayPal}
+                handleChange={this.handleChange}
+              />
+            </ModalElement>
+
+            <ModalElement>
+              <CheckboxFilter
+                labelText="Überweisung"
+                name="paymentMethodWireTransfer"
+                checked={this.state.paymentMethodWireTransfer}
+                handleChange={this.handleChange}
+              />
+            </ModalElement>
+          </Modal>
+        )}
+
+        {this.state.selectedModal === FiltersModal.EXTRAS && (
+          <Modal title="Extras">
+            <ModalText>
+              Wähle alle Extras aus, die{" "}
+              <span className="font-bold">kostenlos</span> angeboten werden
+              sollen.
+            </ModalText>
+
+            <ModalHeadline>Standardport kostenlos</ModalHeadline>
+
+            <ModalElement>
+              <SwitchFilter
+                name="defaultPortFree"
+                checked={this.state.defaultPortFree}
+                handleChange={this.handleChangeNEW}
+              />
+            </ModalElement>
+
+            <ModalHeadline>DDoS Protection kostenlos</ModalHeadline>
+
+            <ModalElement>
+              <SwitchFilter
+                name="ddosProtectionFree"
+                checked={this.state.ddosProtectionFree}
+                handleChange={this.handleChangeNEW}
+              />
+            </ModalElement>
+
+            <ModalHeadline>Datenbank kostenlos</ModalHeadline>
+
+            <ModalElement>
+              <SwitchFilter
+                name="databaseFree"
+                checked={this.state.databaseFree}
+                handleChange={this.handleChangeNEW}
+              />
+            </ModalElement>
+          </Modal>
+        )}
       </>
     );
   }
@@ -381,16 +458,53 @@ export default class Filters extends React.Component<
     );
   }
 
-  // TODO: type
-  // @ts-ignore
-  private handleSubmit(event) {
-    // default <form> would cause a reload of the page
-    event.preventDefault();
+  // TODO: merge handleChange() and handleChangeNEW()
+  private handleChangeNEW(name: string, value: any): void {
+    // .getFilteredCompanies() uses the state and we update the state here
+    // therefore .getFC() should be called after our state update was applied
+    // we do this via the .setState() callback
+    // TODO: use caching, dont declare the const on every handleChange call
+    const callUpdate = () => {
+      const companies = this.getFilteredCompanies();
+      this.props.updateCompanies(companies);
+    };
+
+    this.setState(
+      (prevState: FiltersState) => ({
+        ...prevState,
+        [name]: value,
+      }),
+      callUpdate,
+    );
+  }
+
+  private updateSelectedModal(newModal: null | FiltersModal): void {
+    this.setState((prevState: FiltersState) => {
+      if (prevState.selectedModal === newModal) {
+        return { selectedModal: null };
+      }
+
+      return { selectedModal: newModal };
+    });
   }
 }
 
-const Divider = styled.div`
-  border: solid 1px black;
-  margin: 10px;
-  padding: 10px;
+export const query = graphql`
+  query {
+    zapHosting: file(relativePath: { eq: "logos/zap_hosting.png" }) {
+      id
+      childImageSharp {
+        fluid {
+          base64
+          tracedSVG
+          srcWebp
+          srcSetWebp
+          originalImg
+          originalName
+          presentationWidth
+          presentationHeight
+        }
+      }
+    }
+  }
 `;
