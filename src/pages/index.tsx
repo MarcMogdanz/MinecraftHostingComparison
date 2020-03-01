@@ -14,6 +14,7 @@ interface IndexPageProps {
     site: {
       siteMetadata: {
         title: string;
+        description: string;
       };
     };
   };
@@ -35,13 +36,19 @@ export default class extends React.Component<IndexPageProps, IndexPageState> {
   }
 
   public render() {
+    const { siteMetadata } = this.props.data.site;
+
     return (
       <>
         <Helmet
           bodyAttributes={{
             class: "bg-gray-200",
           }}
-        />
+          htmlAttributes={{ lang: "de" }}
+        >
+          <title>{siteMetadata.title}</title>
+          <meta name="description" content={siteMetadata.description} />
+        </Helmet>
 
         <div className="flex justify-center flex-shrink-0 text-gray-800 mt-6 mb-4">
           <span className="font-semibold text-xl tracking-wide">
@@ -71,17 +78,20 @@ export default class extends React.Component<IndexPageProps, IndexPageState> {
 const Table = ({ companies }: { companies: Company[] }): JSX.Element => {
   const elements = companies.map((company, index) => (
     <div className="w-full md:w-1/2 lg:w-1/3 mb-4" key={index}>
-      <a href={company.url} target="_blank">
+      <a href={company.url} target="_blank" rel="noopener">
         <div className="flex flex-col justify-center items-center text-center shadow-md rounded-lg bg-gray-400 m-2 md:m-6 p-2">
           <div className="text-md font-bold flex flex-col text-gray-900 mb-2">
             <span className="uppercase">{company.name}</span>
+            {/*
+            not yet available
             <span className="font-normal text-gray-700 text-sm">
               Some fancy slogan here
             </span>
+            */}
           </div>
 
           <div className="w-32 h-32 flex items-center justify-center">
-            <img src={company.logoUrl} />
+            <img src={company.logoUrl} alt={company.name} />
           </div>
         </div>
       </a>
@@ -91,12 +101,12 @@ const Table = ({ companies }: { companies: Company[] }): JSX.Element => {
   return <div className="flex flex-wrap">{elements}</div>;
 };
 
-// TODO
 export const pageQuery = graphql`
   query IndexQuery {
     site {
       siteMetadata {
         title
+        description
       }
     }
   }

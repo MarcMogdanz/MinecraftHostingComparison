@@ -1,10 +1,8 @@
 module.exports = {
   siteMetadata: {
-    // TODO: change
-    title: "Gatsby Default Starter",
+    title: "Minecraft Hosting Vergleich",
     description:
-      "Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.",
-    author: "@gatsbyjs",
+      "Finde deinen passenden Minecraft Server genau nach deinen Kriterien.",
   },
   plugins: [
     "gatsby-plugin-react-helmet",
