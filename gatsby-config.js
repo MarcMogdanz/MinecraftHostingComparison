@@ -23,12 +23,12 @@ module.exports = {
     {
       resolve: "gatsby-plugin-manifest",
       options: {
-        name: "gatsby-starter-default",
-        short_name: "starter",
+        name: "Minecraft Hosting Vergleich",
+        short_name: "MC Vergleich",
         start_url: "/",
-        background_color: "#663399",
-        theme_color: "#663399",
-        display: "minimal-ui",
+        background_color: "#e2e8f0",
+        theme_color: "#e2e8f0",
+        display: "standalone",
         // TODO: fix
         // icon: "src/images/gatsby-icon.png" // This path is relative to the root of the site.
       },
@@ -36,7 +36,7 @@ module.exports = {
     "gatsby-plugin-postcss",
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
-    // "gatsby-plugin-offline",
+    "gatsby-plugin-offline",
     {
       // must be BELOW all plugins which modify the babel config
       resolve: "gatsby-plugin-ts-loader",
