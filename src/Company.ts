@@ -56,6 +56,10 @@ export enum PaymentMethod {
   PAYSAFECARD = "PAYSAFECARD",
   PAYPAL = "PAYPAL",
   WIRE_TRANSFER = "WIRE_TRANSFER",
+  SOFORT = "SOFORT",
+  CREDIT_CARD = "CREDIT_CARD",
+  BITCOIN = "BITCOIN",
+  GIROPAY = "GIROPAY",
 }
 
 export enum DefaultPort {

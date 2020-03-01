@@ -26,6 +26,10 @@ interface FiltersState {
   paymentMethodPaysafecard: boolean;
   paymentMethodPayPal: boolean;
   paymentMethodWireTransfer: boolean;
+  paymentMethodSofort: boolean;
+  paymentMethodCreditCard: boolean;
+  paymentMethodBitcoin: boolean;
+  paymentMethodGiropay: boolean;
   defaultPortFree: boolean;
   ddosProtectionFree: boolean;
   databaseFree: boolean;
@@ -56,6 +60,10 @@ export default class Filters extends React.Component<
       paymentMethodPaysafecard: false,
       paymentMethodPayPal: false,
       paymentMethodWireTransfer: false,
+      paymentMethodSofort: false,
+      paymentMethodCreditCard: false,
+      paymentMethodBitcoin: false,
+      paymentMethodGiropay: false,
       defaultPortFree: false,
       ddosProtectionFree: false,
       databaseFree: false,
@@ -180,7 +188,7 @@ export default class Filters extends React.Component<
 
             <ModalElement>
               <CheckboxFilter
-                labelText="Paysafecard"
+                labelText="paysafecard"
                 name="paymentMethodPaysafecard"
                 checked={this.state.paymentMethodPaysafecard}
                 handleChange={this.handleChange}
@@ -201,6 +209,42 @@ export default class Filters extends React.Component<
                 labelText="Überweisung"
                 name="paymentMethodWireTransfer"
                 checked={this.state.paymentMethodWireTransfer}
+                handleChange={this.handleChange}
+              />
+            </ModalElement>
+
+            <ModalElement>
+              <CheckboxFilter
+                labelText="Sofortüberweisung"
+                name="paymentMethodSofort"
+                checked={this.state.paymentMethodSofort}
+                handleChange={this.handleChange}
+              />
+            </ModalElement>
+
+            <ModalElement>
+              <CheckboxFilter
+                labelText="Kreditkarte"
+                name="paymentMethodCreditCard"
+                checked={this.state.paymentMethodCreditCard}
+                handleChange={this.handleChange}
+              />
+            </ModalElement>
+
+            <ModalElement>
+              <CheckboxFilter
+                labelText="Bitcoin"
+                name="paymentMethodBitcoin"
+                checked={this.state.paymentMethodBitcoin}
+                handleChange={this.handleChange}
+              />
+            </ModalElement>
+
+            <ModalElement>
+              <CheckboxFilter
+                labelText="giropay"
+                name="paymentMethodGiropay"
+                checked={this.state.paymentMethodGiropay}
                 handleChange={this.handleChange}
               />
             </ModalElement>
