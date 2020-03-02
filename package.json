@@ -1,8 +1,7 @@
 {
   "name": "mchostcomparison",
-  "private": true,
   "description": "A website to compare different Minecraft Hosting Companies",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "author": "Marc Mogdanz <info@minekayama.de>",
   "scripts": {
     "build": "gatsby build",
@@ -48,7 +47,7 @@
   "keywords": [
     "gatsby"
   ],
-  "license": "UNLICENSED",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/MarcMogdanz/MinecraftHostingComparison"
